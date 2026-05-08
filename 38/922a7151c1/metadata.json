@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.6.1",
+  "checkpoint_id": "38922a7151c1",
+  "strategy": "manual-commit",
+  "branch": "hello-world-example",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "hello-world.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/38/922a7151c1/0/metadata.json",
+      "transcript": "/38/922a7151c1/0/full.jsonl",
+      "content_hash": "/38/922a7151c1/0/content_hash.txt",
+      "prompt": "/38/922a7151c1/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 3853,
+    "cache_read_tokens": 681563,
+    "output_tokens": 2758,
+    "api_call_count": 18
+  }
+}
