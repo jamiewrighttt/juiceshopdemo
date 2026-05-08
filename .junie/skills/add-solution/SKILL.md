@@ -1,3 +1,8 @@
+---
+name: add-solution
+description: Instructions for adding new hacking guides, videos, or tools to SOLUTIONS.md
+---
+
 # Skill: Adding a new Solution or Tool to SOLUTIONS.md
 
 This skill provides instructions for Junie to analyze a new hacking guide, video, or tool, determine if it belongs in `SOLUTIONS.md` or `REFERENCES.md`, collect necessary metadata, and add it to the correct section f `SOLUTIONS.md` following the existing format.
@@ -37,6 +42,7 @@ If in doubt, and the content contains spoilers (indicated by `:godmode:` or `:bu
 6.  **Find the Correct Section**: Locate the target section in `SOLUTIONS.md`.
 7.  **Format the Entry**: Use the specific formatting rules for the identified type.
 8.  **Update Table of Contents**: If a new top-level section is added (rare), update the TOC.
+9.  **Skip Validation Commands**: Since `SOLUTIONS.md` is a plain text file, running `npm run lint`, `npm test`, or any other validation commands is unnecessary if *only* this file (and/or `REFERENCES.md`) was modified.
 
 ## Common Formatting Rules
 

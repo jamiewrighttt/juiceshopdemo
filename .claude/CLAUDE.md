@@ -6,10 +6,48 @@ This guide helps contributors use Claude (AI assistant) effectively when working
 > * GitHub CoPilot ([`.github/copilot-instructions.md`](../.github/copilot-instructions.md))
 > * Codeium ([`.codeium/instructions.md`](../.codeium/instructions.md))
 > * Continue.dev ([`.continue/instructions.md`](../.continue/instructions.md))
+> * Junie ([`.junie/AGENTS.md`](../.junie/AGENTS.md))
 
 ## Before You Start
 
 Claude can assist with various development tasks, but all contributions must still meet the requirements in [CONTRIBUTING.md](../CONTRIBUTING.md). The AI is a tool to enhance productivity, not a replacement for understanding the codebase and contribution guidelines.
+
+## Project Overview
+
+- **Project**: OWASP Juice Shop - an intentionally insecure web application for security training
+- **Primary Languages**: TypeScript, JavaScript, Angular (frontend)
+- **Key Technologies**: Node.js (22–25 with 24 being the default), Express, SQLite/Sequelize, MongoDB/MarsDB, Angular 21.x
+- **Testing**: Mocha/Chai/Sinon (server unit tests), Supertest (API integration), Vitest (frontend unit tests), Cypress (E2E tests)
+- **Code Style**: JS Standard Style (enforced via ESLint)
+- **Repository**: [juice-shop/juice-shop](https://github.com/juice-shop/juice-shop)
+
+## Key Files and Directories
+
+- `app.ts` / `server.ts` - Application entry points
+- `lib/` - Utility functions and libraries (including `lib/startup/` for initialization)
+- `routes/` - Express route handlers
+- `models/` - Sequelize data models (SQLite)
+- `data/` - Data creation and management (`data/static/` for challenges, users, codefixes)
+- `views/` - Server-rendered templates (Handlebars `.hbs` and Pug `.pug`)
+- `test/server/` - Server unit tests (Mocha/Chai/Sinon)
+- `test/api/` - API integration tests (Supertest)
+- `frontend/src/` - Angular frontend code (tests use Vitest)
+- `cypress/` - E2E tests (Cypress)
+- `rsn/` - Refactoring Safety Net scripts and cache
+- `config/` - Configuration files (YAML, multiple themed configs like `ctf.yml`, `default.yml`)
+- `i18n/` - Internationalization files (do NOT modify directly)
+- `ftp/` - Files served via the simulated FTP directory
+- `monitoring/` - Grafana dashboard config
+- `.github/workflows/` - CI/CD pipelines
+- `encryptionkeys/` - Encryption key files
+
+## Important Constraints
+
+1. **Security Context**: This project contains intentional vulnerabilities for training. New vulnerabilities must be approved by maintainers and well-documented.
+2. **Challenge Development**: Consult maintainers before creating new challenges.
+3. **Code Changes and RSN**: When modifying challenge-related code, the Refactoring Safety Net must pass.
+4. **Dependency Updates**: Verify compatibility with `package.json` and `frontend/package.json`.
+5. **Translation Modifications**: Use [Crowdin](https://crowdin.com/project/owasp-juice-shop), not direct file editing.
 
 ## Recommended Use Cases
 
@@ -47,7 +85,7 @@ Keep:
 
 ### 2. Code Style Compliance
 
-Always run ESLint before committing:
+Always run ESLint before committing (unless only `REFERENCES.md` or `SOLUTIONS.md` were modified):
 ```bash
 npm run lint
 ```
@@ -56,15 +94,17 @@ Claude should suggest code following [JS Standard Style](http://standardjs.com/)
 
 ### 3. Testing Requirements
 
-For any code changes Claude helps with:
+For any code changes Claude helps with (unless only `REFERENCES.md` or `SOLUTIONS.md` were modified):
 - **Unit/Integration Tests**: New features and changes should have tests
 - **E2E Tests**: Required for new/modified challenges
-- **RSN (Refactoring Safety Net)**: Required when modifying existing code that is part of a coding challenge
+- **RSN (Refactoring Safety Net)**: Required when modifying existing code that is part of a coding challenge (see the [verify-rsn-fix skill](../.junie/skills/verify-rsn-fix/SKILL.md) for details)
 - **Run Tests Locally**:
   ```bash
-  npm test                    # Unit tests
-  npm run frisby              # API integration tests
-  npm start & npm run cypress:open  # E2E tests
+  npm test                    # Runs frontend, server, and api tests
+  npm run test:frontend       # Frontend unit tests (Vitest)
+  npm run test:server         # Server unit tests only (Mocha/Chai/Sinon)
+  npm run test:api              # API integration tests (Supertest)
+  npm start & npm run test:e2e  # E2E tests (Cypress)
   npm run rsn                 # Refactoring Safety Net (for code changes impacting coding challenge snippets)
   ```
 
@@ -103,7 +143,7 @@ Ask Claude to:
 ```
 Before committing:
 1. Remove AI-generated noise
-2. Run npm run lint
+2. Run npm run lint (unless only `REFERENCES.md` or `SOLUTIONS.md` were modified)
 3. Run relevant test suites
 4. If you modified code that is part of a coding challenge, run npm run rsn
 5. Manually verify functionality
@@ -152,7 +192,7 @@ Ask Claude to:
 
 # 5. Quality checks
 npm run lint
-npm test
+npm run test:server # Run relevant tests (e.g. server)
 npm run rsn  # If the fix affects code used in a coding challenge
 
 # 6. Clean up and commit with sign-off
@@ -172,7 +212,6 @@ Before submitting a Claude-assisted PR:
 - [ ] PR based on `develop` branch
 - [ ] Single, focused scope
 - [ ] All CI checks passing
-- [ ] PR based on `develop` branch
 - [ ] PR contains AI Tool Disclosure and Affirmation
 
 ## Refactoring Safety Net (RSN)
@@ -199,16 +238,26 @@ npm run rsn
   ```bash
   npm run rsn:update
   ```
+- IMPORTANT: Utilize the [verify-rsn-fix skill](../.junie/skills/verify-rsn-fix/SKILL.md)
+- When refactoring source code that is part of a challenge snippet, manually apply the same changes to the corresponding codefix files in `data/static/codefixes/` to maintain consistency. The RSN check should ideally pass without needing to update the cache for non-challenge-related refactorings.
 - If changes are unintentional, fix the affected files
 
 Learn more: [Code Snippets Documentation](https://pwning.owasp-juice.shop/companion-guide/latest/part5/code-snippets.html)
 
 ## Getting Help
 
-- Review the [detailed contribution guidelines](https://pwning.owasp-juice.shop/companion-guide/latest/part3/contribution.html)
+- Refer to the [detailed contribution guidelines](https://pwning.owasp-juice.shop/companion-guide/latest/part3/contribution.html)
 - Check existing issues and PRs for examples
 - Join the community on Slack or Gitter
 - Ask questions via Slack or comment on the GitHub issue you are working on
+
+## Skills
+
+- [add-reference skill](../.junie/skills/add-reference/SKILL.md): Instructions for adding new blog posts, talks, or other references to `REFERENCES.md`
+- [add-solution skill](../.junie/skills/add-solution/SKILL.md): Instructions for adding new hacking guides, videos, or tools to `SOLUTIONS.md`
+- [create-m3-theme skill](../.junie/skills/create-m3-theme/SKILL.md): Instructions for creating new Angular Material M3 themes
+- [verify-challenge skill](../.junie/skills/verify-challenge/SKILL.md): Instructions for verifying new challenges fulfill all project requirements and metadata
+- [verify-rsn-fix skill](../.junie/skills/verify-rsn-fix/SKILL.md): Instructions for identifying and fixing broken RSN caused by code changes
 
 ## Remember
 

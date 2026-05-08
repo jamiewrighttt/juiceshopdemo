@@ -1,3 +1,8 @@
+---
+name: add-reference
+description: Instructions for adding new blog posts, talks, or other references to REFERENCES.md
+---
+
 # Skill: Adding a new Reference to REFERENCES.md
 
 This skill provides instructions for Junie to analyze a new reference (blog post, podcast, conference talk, etc.), determine if it belongs in `REFERENCES.md` or `SOLUTIONS.md`, collect missing information, and add it to the correct section of `REFERENCES.md` following the existing format.
@@ -39,6 +44,7 @@ If in doubt, and the content contains spoilers (indicated by `:godmode:` or `:bu
     - Note: Conference appearances are ordered by year (descending) and then roughly by date (descending).
 7.  **Format the Entry**: Use the specific formatting rules for the identified type.
 8.  **Update Table of Contents**: If a new year is added to "Conference and Meetup Appearances", update the TOC.
+9.  **Skip Validation Commands**: Since `REFERENCES.md` is a plain text file, running `npm run lint`, `npm test`, or any other validation commands is unnecessary if *only* this file (and/or `SOLUTIONS.md`) was modified.
 
 ## Supported Types
 
